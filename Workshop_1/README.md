@@ -23,7 +23,7 @@ In this workshop, a system was developed to manage, generate, and analyze geneti
 
 1. Clone this repository and navigate to the `Workshop_1` folder.
 2. Compile the Java files.
-3. Run the `Controller` class to start interacting with the system.
+3. Run the `AplMain` class to start interacting with the system.
 4. You can choose between using an existing database (from the `.txt` file) or generating new sequences.
 
 ## **Additional Information**
