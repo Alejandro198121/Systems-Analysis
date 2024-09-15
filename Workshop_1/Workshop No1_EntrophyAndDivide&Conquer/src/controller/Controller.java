@@ -118,7 +118,8 @@ public class Controller {
 		double umbralEntropia;
 		while (true) {
 			try {
-				umbralEntropia = view.leerDatoDouble("Ingrese el umbral de entropía para filtrar (mínimo: 0,0 máximo: 1,9): ");
+				umbralEntropia = view
+						.leerDatoDouble("Ingrese el umbral de entropía para filtrar (mínimo: 0,0 máximo: 1,9): ");
 				if (umbralEntropia >= 0.0 && umbralEntropia <= 1.9) {
 					break;
 				} else {
@@ -144,12 +145,48 @@ public class Controller {
 			try {
 				s = view.leerDatoEntero("Ingrese el tamaño del motif a buscar (4 <= s <= 10): ");
 				manager.validarTamañoMotif(s);
-				break;
+
+				// Verificar si el tamaño del motif es mayor que el tamaño máximo de las cadenas
+				int longitudMaxima = manager.obtenerLongitudMaximaSecuencia();
+				if (s > longitudMaxima) {
+					view.mostrarInformacion(
+							"El tamaño del motif es mayor que la longitud de las secuencias en la base de datos (longitud máxima: "
+									+ longitudMaxima + ").");
+					return;
+				}
+
+				// Obtener todos los motifs de tamaño s y sus repeticiones
+				Map<String, Integer> todosLosMotifs = manager.detectarMotif(s);
+				if (todosLosMotifs.isEmpty()) {
+					view.mostrarInformacion("No se encontraron motifs de tamaño " + s + ".");
+					return;
+				}
+
+				// Mostrar la lista de todos los motifs y sus repeticiones
+				view.mostrarInformacion("Lista de todos los motifs de tamaño " + s + " y sus repeticiones:");
+				for (Map.Entry<String, Integer> entry : todosLosMotifs.entrySet()) {
+					view.mostrarInformacion("Motif: " + entry.getKey() + " - Repeticiones: " + entry.getValue());
+				}
+
+				// Encontrar el motif más frecuente
+				String motifFrecuente = null;
+				int maxOcurrencias = 0;
+				for (Map.Entry<String, Integer> entry : todosLosMotifs.entrySet()) {
+					if (entry.getValue() > maxOcurrencias) {
+						maxOcurrencias = entry.getValue();
+						motifFrecuente = entry.getKey();
+					}
+				}
+
+				// Mostrar el motif más frecuente
+				view.mostrarInformacion("El motif más frecuente de tamaño " + s + " es: " + motifFrecuente
+						+ " y se repite " + maxOcurrencias + " veces.");
+
+				return;
 			} catch (IllegalArgumentException e) {
 				view.mostrarInformacion(e.getMessage());
 			}
 		}
-		String motifFrecuente = manager.detectarMotif(s);
-		view.mostrarInformacion("El motif más frecuente de tamaño " + s + " es: " + motifFrecuente);
 	}
+
 }

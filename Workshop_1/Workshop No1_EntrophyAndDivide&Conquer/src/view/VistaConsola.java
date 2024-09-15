@@ -15,6 +15,7 @@ public class VistaConsola {
 	public void limpiarBuffer() {
 		scanner.nextLine();
 	}
+
 	public void mostrarInformacion(String mensaje) {
 		System.out.println(mensaje);
 	}
@@ -35,6 +36,11 @@ public class VistaConsola {
 			double entropia = entropias.get(id);
 			System.out.println("ID: " + id + " - Secuencia: " + secuencia + " - Entropía: " + entropia);
 		}
+	}
+
+	public String leerDatoString(String mensaje) {
+		System.out.print(mensaje);
+		return scanner.nextLine();
 	}
 
 }

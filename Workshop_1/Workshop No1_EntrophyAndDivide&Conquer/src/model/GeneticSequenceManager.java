@@ -14,6 +14,24 @@ public class GeneticSequenceManager {
 		random = new Random();
 	}
 
+	public int obtenerLongitudMaximaSecuencia() {
+		return database.values().stream().mapToInt(String::length).max().orElse(0);
+	}
+
+	public Map<String, Integer> obtenerTodosLosMotifs(int s) {
+		HashMap<String, Integer> conteoMotifs = new HashMap<>();
+		for (String secuencia : database.values()) {
+			if (secuencia.length() < s) {
+				continue;
+			}
+			for (int i = 0; i <= secuencia.length() - s; i++) {
+				String subsecuencia = secuencia.substring(i, i + s);
+				conteoMotifs.put(subsecuencia, conteoMotifs.getOrDefault(subsecuencia, 0) + 1);
+			}
+		}
+		return conteoMotifs;
+	}
+
 	private double[] generarProbabilidadesAleatorias() {
 		double pA = random.nextDouble();
 		double pC = random.nextDouble();
@@ -24,7 +42,6 @@ public class GeneticSequenceManager {
 		return new double[] { pA / suma, pC / suma, pG / suma, pT / suma };
 	}
 
-	
 	public void generarSecuencias(int n, int m) {
 		double[] probabilidades = generarProbabilidadesAleatorias();
 		double pA = probabilidades[0];
@@ -71,8 +88,6 @@ public class GeneticSequenceManager {
 		return s;
 	}
 
-	
-
 	public double calcularEntropia(String secuencia) {
 		int length = secuencia.length();
 		if (length == 0)
@@ -95,26 +110,8 @@ public class GeneticSequenceManager {
 		database.entrySet().removeIf(entry -> calcularEntropia(entry.getValue()) < umbral);
 	}
 
-	public String detectarMotif(int s) {
-		HashMap<String, Integer> conteoMotifs = new HashMap<>();
-		for (String secuencia : database.values()) {
-			for (int i = 0; i <= secuencia.length() - s; i++) {
-				String subsecuencia = secuencia.substring(i, i + s);
-				conteoMotifs.put(subsecuencia, conteoMotifs.getOrDefault(subsecuencia, 0) + 1);
-			}
-		}
-
-		String motifFrecuente = null;
-		int maxOcurrencias = 0;
-		for (Map.Entry<String, Integer> entry : conteoMotifs.entrySet()) {
-			String motif = entry.getKey();
-			int ocurrencias = entry.getValue();
-			if (ocurrencias > maxOcurrencias) {
-				maxOcurrencias = ocurrencias;
-				motifFrecuente = motif;
-			}
-		}
-		return motifFrecuente;
+	public Map<String, Integer> detectarMotif(int s) {
+		return obtenerTodosLosMotifs(s);
 	}
 
 	public HashMap<Integer, String> getDatabase() {
