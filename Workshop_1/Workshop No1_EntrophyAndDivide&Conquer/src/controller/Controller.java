@@ -5,45 +5,30 @@ import view.VistaConsola;
 
 import java.util.InputMismatchException;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Controller {
 
 	private GeneticSequenceManager model;
 	private VistaConsola view;
-	private Scanner scanner;
 
-	/**
-	 * Initializes the Controller with the GeneticSequenceManager model,
-	 * VistaConsola view, and a Scanner for user input.
-	 */
 	public Controller() {
 		model = new GeneticSequenceManager();
 		view = new VistaConsola();
-		scanner = new Scanner(System.in);
 	}
 
-	/**
-	 * Starts the application and repeatedly displays the main menu.
-	 */
 	public void ejecutar() {
 		while (true) {
 			mostrarMenuPrincipal();
 		}
 	}
 
-	/**
-	 * Displays the main menu and processes user input.
-	 */
 	private void mostrarMenuPrincipal() {
 		System.out.println("\n--- Menú Principal ---");
 		System.out.println("1. Usar base de datos actual");
 		System.out.println("2. Generar nuevas secuencias");
 		System.out.println("3. Salir");
-		System.out.print("Seleccione una opción: ");
 
-		int opcion = scanner.nextInt();
-		scanner.nextLine(); // Consumir el salto de línea
+		int opcion = view.leerDatoEntero("Seleccione una opción: ");
 
 		switch (opcion) {
 		case 1:
@@ -66,9 +51,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Displays the database menu and processes user input.
-	 */
 	private void mostrarSubmenuBaseDatos() {
 		while (true) {
 			System.out.println("\n--- Menú de Base de Datos ---");
@@ -76,10 +58,8 @@ public class Controller {
 			System.out.println("2. Filtrar por entropía");
 			System.out.println("3. Buscar motivo");
 			System.out.println("4. Volver al menú principal");
-			System.out.print("Seleccione una opción: ");
 
-			int opcion = scanner.nextInt();
-			scanner.nextLine(); // Consumir el salto de línea
+			int opcion = view.leerDatoEntero("Seleccione una opción: ");
 
 			switch (opcion) {
 			case 1:
@@ -105,9 +85,6 @@ public class Controller {
 		}
 	}
 
-	/**
-	 * Prompts the user to input parameters and generates new sequences.
-	 */
 	private void generarNuevasSecuencias() {
 		int n, m;
 
@@ -137,25 +114,20 @@ public class Controller {
 		view.mostrarSecuenciasConEntropia(model.getDatabase(), entropias);
 	}
 
-	/**
-	 * Prompts the user to input an entropy threshold and filters sequences based on
-	 * it.
-	 */
 	private void filtrarPorEntropia() {
 		double umbralEntropia;
 		while (true) {
 			try {
-				System.out.print("Ingrese el umbral de entropía para filtrar (mínimo: 0.0, máximo: 1.9): ");
-				umbralEntropia = scanner.nextDouble();
+				umbralEntropia = view.leerDatoDouble("Ingrese el umbral de entropía para filtrar (mínimo: 0,0 máximo: 1,9): ");
 				if (umbralEntropia >= 0.0 && umbralEntropia <= 1.9) {
 					break;
 				} else {
-					view.mostrarInformacion("El valor del umbral de entropía debe estar entre 0.0 y 1.9.");
+					view.mostrarInformacion("El valor del umbral de entropía debe estar entre 0,0 y 1,9.");
 				}
 			} catch (InputMismatchException e) {
-				// Mensaje de error cuando la entrada es incorrecta (letras o formato inválido)
+
 				System.out.println("Entrada no válida, decimales se leen con coma ',' no con punto '.'.");
-				scanner.nextLine(); // Limpiar el buffer de entrada para que no cause un bucle infinito
+				view.limpiarBuffer();
 			}
 		}
 
@@ -166,10 +138,6 @@ public class Controller {
 		view.mostrarSecuenciasConEntropia(model.getDatabase(), entropiasFiltradas);
 	}
 
-	/**
-	 * Prompts the user to input the motif size and searches for the most frequent
-	 * motif.
-	 */
 	private void buscarMotivo() {
 		int s;
 		while (true) {
@@ -181,7 +149,7 @@ public class Controller {
 				view.mostrarInformacion(e.getMessage());
 			}
 		}
-		String motivoFrecuente = model.detectarMotivo(s);
+		String motivoFrecuente = model.detectarMotif(s);
 		view.mostrarInformacion("El motivo más frecuente de tamaño " + s + " es: " + motivoFrecuente);
 	}
 }

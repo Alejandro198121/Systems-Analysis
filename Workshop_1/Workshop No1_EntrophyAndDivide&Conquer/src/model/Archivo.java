@@ -9,22 +9,13 @@ public class Archivo {
 	private static final String DIRECTORY_PATH = "data";
 	private static final String FILE_PATH = DIRECTORY_PATH + File.separator + "secuencias.txt";
 
-	/**
-	 * Creates the 'data' directory if it does not exist.
-	 */
 	private static void asegurarDirectorio() {
 		File directorio = new File(DIRECTORY_PATH);
 		if (!directorio.exists()) {
-			directorio.mkdirs(); // Crea el directorio y cualquier directorio padre necesario
+			directorio.mkdirs();
 		}
 	}
 
-	/**
-	 * Saves the HashMap to a .txt file.
-	 *
-	 * @param database The HashMap to be saved.
-	 * @throws IOException If an I/O error occurs.
-	 */
 	public static void guardarDatos(HashMap<Integer, String> database) throws IOException {
 		asegurarDirectorio(); // Asegura que el directorio exista
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
@@ -35,12 +26,6 @@ public class Archivo {
 		}
 	}
 
-	/**
-	 * Loads the HashMap from a .txt file.
-	 *
-	 * @return The HashMap loaded from the file.
-	 * @throws IOException If an I/O error occurs.
-	 */
 	public static HashMap<Integer, String> cargarDatos() throws IOException {
 		HashMap<Integer, String> database = new HashMap<>();
 		File archivo = new File(FILE_PATH);
