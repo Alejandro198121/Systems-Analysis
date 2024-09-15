@@ -24,10 +24,3 @@ This project is a comprehensive solution for analyzing genetic sequences. It inc
 
 - **Java Development Kit (JDK)**: Version 8 or later.
 - **Basic Understanding**: Knowledge of genetic sequences and entropy concepts is helpful but not required.
-
-## How to Run
-
-1. Ensure you have Java installed on your machine.
-2. Compile all Java files:
-   ```bash
-   javac controller/AplMain.java controller/Controller.java model/Archivo.java model/GeneticSequenceManager.java view/VistaConsola.java
