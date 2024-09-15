@@ -64,9 +64,9 @@ public class GeneticSequenceManager {
 		return m;
 	}
 
-	public int validarTamañoMotivo(int s) {
+	public int validarTamañoMotif(int s) {
 		if (s < 4 || s > 10) {
-			throw new IllegalArgumentException("El tamaño del motivo debe estar entre 4 y 10.");
+			throw new IllegalArgumentException("El tamaño del motif debe estar entre 4 y 10.");
 		}
 		return s;
 	}
@@ -107,11 +107,11 @@ public class GeneticSequenceManager {
 		String motifFrecuente = null;
 		int maxOcurrencias = 0;
 		for (Map.Entry<String, Integer> entry : conteoMotifs.entrySet()) {
-			String motivo = entry.getKey();
+			String motif = entry.getKey();
 			int ocurrencias = entry.getValue();
 			if (ocurrencias > maxOcurrencias) {
 				maxOcurrencias = ocurrencias;
-				motifFrecuente = motivo;
+				motifFrecuente = motif;
 			}
 		}
 		return motifFrecuente;

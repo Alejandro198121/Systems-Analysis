@@ -8,11 +8,11 @@ import java.util.Map;
 
 public class Controller {
 
-	private GeneticSequenceManager model;
+	private GeneticSequenceManager manager;
 	private VistaConsola view;
 
 	public Controller() {
-		model = new GeneticSequenceManager();
+		manager = new GeneticSequenceManager();
 		view = new VistaConsola();
 	}
 
@@ -32,7 +32,7 @@ public class Controller {
 
 		switch (opcion) {
 		case 1:
-			model.cargarDesdeArchivo();
+			manager.cargarDesdeArchivo();
 			System.out.println("Base de datos cargada desde el archivo.");
 			mostrarSubmenuBaseDatos();
 			break;
@@ -56,15 +56,15 @@ public class Controller {
 			System.out.println("\n--- Menú de Base de Datos ---");
 			System.out.println("1. Obtener e imprimir secuencias");
 			System.out.println("2. Filtrar por entropía");
-			System.out.println("3. Buscar motivo");
+			System.out.println("3. Buscar motif");
 			System.out.println("4. Volver al menú principal");
 
 			int opcion = view.leerDatoEntero("Seleccione una opción: ");
 
 			switch (opcion) {
 			case 1:
-				Map<Integer, Double> entropiasDesdeArchivo = model.getSecuenciasConEntropia();
-				view.mostrarSecuenciasConEntropia(model.getDatabase(), entropiasDesdeArchivo);
+				Map<Integer, Double> entropiasDesdeArchivo = manager.getSecuenciasConEntropia();
+				view.mostrarSecuenciasConEntropia(manager.getDatabase(), entropiasDesdeArchivo);
 				break;
 
 			case 2:
@@ -72,7 +72,7 @@ public class Controller {
 				break;
 
 			case 3:
-				buscarMotivo();
+				buscarMotif();
 				break;
 
 			case 4:
@@ -91,7 +91,7 @@ public class Controller {
 		while (true) {
 			try {
 				n = view.leerDatoEntero("Ingrese el número de secuencias (1000 <= n <= 2000000): ");
-				model.validarNumeroDeSecuencias(n);
+				manager.validarNumeroDeSecuencias(n);
 				break;
 			} catch (IllegalArgumentException e) {
 				view.mostrarInformacion(e.getMessage());
@@ -101,17 +101,17 @@ public class Controller {
 		while (true) {
 			try {
 				m = view.leerDatoEntero("Ingrese el tamaño de las secuencias (5 <= m <= 100): ");
-				model.validarTamañoSecuencias(m);
+				manager.validarTamañoSecuencias(m);
 				break;
 			} catch (IllegalArgumentException e) {
 				view.mostrarInformacion(e.getMessage());
 			}
 		}
 
-		model.generarSecuencias(n, m);
-		model.guardarEnArchivo();
-		Map<Integer, Double> entropias = model.getSecuenciasConEntropia();
-		view.mostrarSecuenciasConEntropia(model.getDatabase(), entropias);
+		manager.generarSecuencias(n, m);
+		manager.guardarEnArchivo();
+		Map<Integer, Double> entropias = manager.getSecuenciasConEntropia();
+		view.mostrarSecuenciasConEntropia(manager.getDatabase(), entropias);
 	}
 
 	private void filtrarPorEntropia() {
@@ -131,25 +131,25 @@ public class Controller {
 			}
 		}
 
-		model.filtrarPorEntropia(umbralEntropia);
-		model.guardarEnArchivo();
+		manager.filtrarPorEntropia(umbralEntropia);
+		manager.guardarEnArchivo();
 		view.mostrarInformacion("Secuencias filtradas por entropía:");
-		Map<Integer, Double> entropiasFiltradas = model.getSecuenciasConEntropia();
-		view.mostrarSecuenciasConEntropia(model.getDatabase(), entropiasFiltradas);
+		Map<Integer, Double> entropiasFiltradas = manager.getSecuenciasConEntropia();
+		view.mostrarSecuenciasConEntropia(manager.getDatabase(), entropiasFiltradas);
 	}
 
-	private void buscarMotivo() {
+	private void buscarMotif() {
 		int s;
 		while (true) {
 			try {
-				s = view.leerDatoEntero("Ingrese el tamaño del motivo a buscar (4 <= s <= 10): ");
-				model.validarTamañoMotivo(s);
+				s = view.leerDatoEntero("Ingrese el tamaño del motif a buscar (4 <= s <= 10): ");
+				manager.validarTamañoMotif(s);
 				break;
 			} catch (IllegalArgumentException e) {
 				view.mostrarInformacion(e.getMessage());
 			}
 		}
-		String motivoFrecuente = model.detectarMotif(s);
-		view.mostrarInformacion("El motivo más frecuente de tamaño " + s + " es: " + motivoFrecuente);
+		String motifFrecuente = manager.detectarMotif(s);
+		view.mostrarInformacion("El motif más frecuente de tamaño " + s + " es: " + motifFrecuente);
 	}
 }
